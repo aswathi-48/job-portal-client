@@ -1,0 +1,20 @@
+.mui-1k8m6w8-MuiButtonBase-root-MuiButton-root:hover {
+    background-color: rgb(14, 14, 46);
+
+}
+
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-cell--textLeft {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.MuiDataGrid-columnHeader--last{
+    margin-left: 70px;
+
+}
+/* 
+.mui-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar {
+    padding-right: 159px !important;
+} */
