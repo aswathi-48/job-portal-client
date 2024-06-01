@@ -62,7 +62,7 @@ export const addJobs = async (req, res, next) => {
         }
 
         const { role } = req.userDetails;
-        const { company, job_title, job_type, salary, category, requirements, description, status } = req.body;
+        const { company, job_title, job_type, salary, category, requirements, description, status, interviewScheduledAt } = req.body;
 
         if (role !== 'admin') {
 
@@ -82,7 +82,8 @@ export const addJobs = async (req, res, next) => {
                 category,
                 requirements: Array.isArray(requirements) ? requirements : JSON.parse(requirements),
                 description,
-                status
+                status,
+                interviewScheduledAt
             });
 
             const saveJob = await newJob.save();
@@ -92,9 +93,14 @@ export const addJobs = async (req, res, next) => {
                 return next(new HttpError("Oops! Process failed, please do contact admin", 400));
                 
             } else {
+
+
+                
+
+
                 // Send notification emails
                 await sendJobNotificationEmails(newJob);
-                await checkAndNotifyUsers()
+                await checkAndNotifyUsers(newJob)
                 res.status(200).json({
                     status: true,
                     message: "Job successfully added",
@@ -109,110 +115,114 @@ export const addJobs = async (req, res, next) => {
 };
 
 
-// export const listJobs = async(req, res, next) => {
+export const listJobs = async(req, res, next) => {
     
-//     try {
-
-//         const errors = validationResult(req)
-
-//         if(!errors.isEmpty()) {
-
-//             return next(new HttpError("Something went wrong..", 422))
-//         } else {
-
-//             let query = { isdeleted: false };
-
-//             const { q, job_type, category } = req.body
-             
-//             if(q) {
-//                 const searchValue = q.toLowerCase();
-
-//                 query.$or = [
-//                     { job_title: { $regex: searchValue, $options: 'i' } },
-//                     { job_type: { $regex: searchValue, $options: 'i' } }
-//                 ];
-//             }
-//             if(job_type) {
-//                 query.job_type = job_type
-//             }
-//             if(category) {
-//                 query.category = category
-//             }
-             
-//             const jobList = await Job.find(query)
-//             .populate({
-//                 path: 'company',
-//                 select: "company_name location "
-//             })
-
-//             res.status(200).json({
-//                 status: true,
-//                 message: 'SuccessFull',
-//                 data: jobList,
-                
-//             })
-//         }
-
-//     } catch(err) {
-//         console.error(err)
-//         return next(new HttpError("Oops! Process failed, please do contact admin", 500))
-//     }
-// }
-
-
-export const listJobs = async (req, res, next) => {
     try {
-        const errors = validationResult(req);
 
-        if (!errors.isEmpty()) {
-            return next(new HttpError("Something went wrong..", 422));
-        }
+        const errors = validationResult(req)
 
-        let query = { isdeleted: false };
+        if(!errors.isEmpty()) {
 
-        const { q, job_type, category, company_name, location } = req.body;
+            return next(new HttpError("Something went wrong..", 422))
+        } else {
 
-        if (q) {
-            const searchValue = q.toLowerCase();
+            let query = { isdeleted: false };
 
-            query.$or = [
-                { job_title: { $regex: searchValue, $options: 'i' } },
-                { job_type: { $regex: searchValue, $options: 'i' } }
-            ];
-        }
+            const { q, job_type, category } = req.body
+             
+            if(q) {
+                const searchValue = q.toLowerCase();
 
-        if (job_type) {
-            query.job_type = job_type;
-        }
-
-        if (category) {
-            query.category = category;
-        }
-
-        if (company_name) {
-            query['company.company_name'] = { $regex: company_name, $options: 'i' };
-        }
-
-        if (location) {
-            query['company.location'] = { $regex: location, $options: 'i' };
-        }
-
-        const jobList = await Job.find(query)
+                query.$or = [
+                    { job_title: { $regex: searchValue, $options: 'i' } },
+                    { job_type: { $regex: searchValue, $options: 'i' } }
+                ];
+            }
+            if(job_type) {
+                query.job_type = job_type
+            }
+            if(category) {
+                query.category = category
+            }
+             
+            const jobList = await Job.find(query)
             .populate({
                 path: 'company',
-                select: 'company_name location'
-            });
+                select: "company_name location "
+            })
+            .populate({
+                path: "user",
+                select: "first_name skills"
+            })
 
-        res.status(200).json({
-            status: true,
-            message: 'Successfully fetched jobs',
-            data: jobList
-        });
-    } catch (err) {
-        console.error(err);
-        return next(new HttpError("Oops! Process failed, please do contact admin", 500));
+            res.status(200).json({
+                status: true,
+                message: 'SuccessFull',
+                data: jobList,
+                
+            })
+        }
+
+    } catch(err) {
+        console.error(err)
+        return next(new HttpError("Oops! Process failed, please do contact admin", 500))
     }
-};
+}
+
+
+// export const listJobs = async (req, res, next) => {
+//     try {
+//         const errors = validationResult(req);
+
+//         if (!errors.isEmpty()) {
+//             return next(new HttpError("Something went wrong..", 422));
+//         }
+
+//         let query = { isdeleted: false };
+
+//         const { q, job_type, category, company_name, location } = req.body;
+
+//         if (q) {
+//             const searchValue = q.toLowerCase();
+
+//             query.$or = [
+//                 { job_title: { $regex: searchValue, $options: 'i' } },
+//                 { job_type: { $regex: searchValue, $options: 'i' } }
+//             ];
+//         }
+
+//         if (job_type) {
+//             query.job_type = job_type;
+//         }
+
+//         if (category) {
+//             query.category = category;
+//         }
+
+//         if (company_name) {
+//             query['company.company_name'] = { $regex: company_name, $options: 'i' };
+//         }
+
+//         if (location) {
+//             query['company.location'] = { $regex: location, $options: 'i' };
+//         }
+
+//         const jobList = await Job.find(query)
+//             .populate({
+//                 path: 'company',
+//                 select: 'company_name location'
+//             });
+
+//         res.status(200).json({
+//             status: true,
+//             message: 'Successfully fetched jobs',
+//             data: jobList
+//         });
+//     } catch (err) {
+//         console.error(err);
+//         return next(new HttpError("Oops! Process failed, please do contact admin", 500));
+//     }
+// };
 
 
 export const viewJob = async(req, res, next) => {

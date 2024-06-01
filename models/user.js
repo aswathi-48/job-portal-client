@@ -52,11 +52,8 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         require: true,
     },
-    skill: {
-        ref : "skills",
-        type: mongoose.Schema.Types.ObjectId,
-        require: true,
-    },
+   
+    skills: [{ type: String }],
 
 }, { timestamps: true})
 

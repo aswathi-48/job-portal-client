@@ -25,7 +25,7 @@ const JobSchema = new mongoose.Schema({
     
     },
     requirements: {
-        type: String,
+        type: [String],
         require: true
     },
     description: {
@@ -40,6 +40,18 @@ const JobSchema = new mongoose.Schema({
         type: String,
         require: true,
         default: "Active"
+    },
+    interviewScheduledAt: {
+        type: Date,
+        // min: Date.now(),
+    },
+    isApplied: {
+        type:Boolean,
+        default: false
+    },
+    user: {
+        ref : "users",
+        type: mongoose.Schema.Types.ObjectId,
     }
 
 }, {timestamps: true})

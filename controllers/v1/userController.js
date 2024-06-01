@@ -11,7 +11,7 @@ export const register = async (req, res, next) => {
 
     const errors = validationResult(req);
 
-    const { first_name, last_name, gender, date_of_birth, email, password, role,  company} = req.body;
+    const { first_name, last_name, gender, date_of_birth, email, password, role,  company, skills} = req.body;
 
     if (!errors.isEmpty()) {
 
@@ -31,7 +31,7 @@ export const register = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
 
-    const newUser = new User({ first_name, last_name, gender, date_of_birth, email, role, password: hash, company });
+    const newUser = new User({ first_name, last_name, gender, date_of_birth, email, role, password: hash, company, skills });
     console.log(newUser);
     if (req.file && req.file.filename) {
 
@@ -135,7 +135,7 @@ export const register = async (req, res, next) => {
 //           message: "Subscription successful",
 //           data: updatedUser
 //       });
-//   } catch (err) {
+//   } catch (err) {  
 //       return next(new HttpError("Oops! Process failed", 500));
 //   }
 // };
@@ -152,6 +152,7 @@ export const listSubscribedUser = async(req, res, next) => {
       return next(new HttpError("Something went wrong..", 422))
 
     } else {
+
       let query = { isSubscribed: true };
 
       const { q } = req.body
@@ -197,16 +198,13 @@ export const getUser = async (req, res, next) => {
   }
 };
 
-//get all client user
-
+//get all client user 
+ 
 export const getClientUsers = async (req, res, next) => {
 
   try {
 
-    const clients = await User.find({ role: 'client'}).select('-password').populate({
-      path:'skill',
-      select:'skills'
-    })
+    const clients = await User.find({ role: 'client'}).select('-password')
     console.log(clients,"dataa");
     if (!clients || clients.length === 0) {
 
