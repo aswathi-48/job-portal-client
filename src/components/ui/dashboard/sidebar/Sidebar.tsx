@@ -54,15 +54,15 @@ const menuItems = [
             }
         ]
     },
-    {
-        title: "Cv",
-        list: [
-            {
-                title: "Cv & Skills",
-                path: "/dashboard/userCv"
-            }
-        ]
-    }
+    // {
+    //     title: "Cv",
+    //     list: [
+    //         {
+    //             title: "Cv & Skills",
+    //             path: "/dashboard/userCv"
+    //         }
+    //     ]
+    // }
 ]
 
 
@@ -112,6 +112,7 @@ const Sidebar = () => {
             }}>
 
             <Button onClick={handleLogout}>Logout</Button>
+            <Button onClick={()=> router.push('/home')} sx={{  }}> Home Page</Button>
             </div>
 
         </div>

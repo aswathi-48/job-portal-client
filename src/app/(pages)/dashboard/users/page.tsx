@@ -41,6 +41,7 @@ const AdminUserView = () => {
     { field: 'first_name', headerName: ' Name', width: 100 },
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'gender', headerName: 'Gender', width: 150 },
+    { field: 'skills', headerName: 'Skills', width: 150 },
     { field: 'date_of_birth', headerName: 'Date Of Birth', width: 100,
     renderCell: (params) => (
       <>

@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FormLabel, Radio, RadioGroup } from '@mui/material';
+import { Autocomplete, FormLabel, Radio, RadioGroup, Stack } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -25,6 +25,7 @@ interface FormValues {
   date_of_birth: string;
   password: string;
   image: FileList;
+  skills: string[]
 }
 const defaultTheme = createTheme();
 function Copyright(props: any) {
@@ -39,11 +40,34 @@ function Copyright(props: any) {
     </Typography>
   );
 }
+
+
+
+const Skills = [
+  { title: 'HTML' },
+  { title: 'CSS' },
+  { title: 'JavaScript' },
+  { title: 'ReactJs' },
+  { title: 'NextJs' },
+  { title: 'Python' },
+  { title: 'NodeJs' },
+  { title: 'Photoshop' },
+  { title: 'Figma' },
+  { title: 'TypeScript' },
+  { title: 'Dotnet' },
+  { title: 'PHP' },
+  { title: 'NoSQL' },
+  { title: 'Perl' },
+  { title: 'Swift' },
+  { title: 'Java' },
+  { title: 'SQL' },
+];
+
 export default function SignUp() {
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>();
   const onSubmit = async (data: FormValues) => {
     try {
       const formData = new FormData();
@@ -53,7 +77,11 @@ export default function SignUp() {
       formData.append("email", data.email);
       formData.append("password", data.password);
       formData.append("date_of_birth", data.date_of_birth);
-      formData.append("image", data.image[0]);
+      if (data.skills) {
+        const skillsString = data.skills.join(', '); 
+        formData.append("skills", skillsString);
+    }     
+     formData.append("image", data.image[0]);
       const response = await axios.post('http://localhost:5100/user/register', formData);
       console.log(response.data);
       router.push('/login');
@@ -179,6 +207,26 @@ export default function SignUp() {
                 </RadioGroup>
                 {errors.gender && <Typography color="error">{errors.gender.message}</Typography>}
               </Grid>
+              <Stack spacing={3} sx={{ width: 500 }}>
+                    <Autocomplete
+                        multiple
+                        id="tags-standard"
+                        options={Skills}
+                        getOptionLabel={(option) => option.title}
+                        defaultValue={[Skills[0]]}
+                        onChange={(event, value) => {
+                            setValue("skills", value.map((option) => option.title));
+                        }}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                variant="standard"
+                                label="Skills"
+                                placeholder="Favorites"
+                            />
+                        )}
+                    />
+                </Stack>
               <Grid item xs={12}>
                 {imagePreview && (
                   <img src={imagePreview.toString()} alt="Preview" style={{ maxWidth: '40%', marginTop: '15px', marginLeft: '25%' }} />

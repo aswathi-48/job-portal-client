@@ -26,7 +26,7 @@ interface Data {
             location: {
                 city: string;
             };
-            coordinates: {
+            cordinates: {
                 lat: string;
                 lng: string;
             };
@@ -61,7 +61,7 @@ export default function BasicCard({ data }: Data) {
     const shareTitle = data.job_title;
 
     return (
-        <Card sx={{ width: 445, cursor: 'pointer', background: '#FFF5FF' }}>
+        <Card sx={{ width: 445, cursor: 'pointer', background: '#FFF5FF'}}>
             <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     Job Posting:
@@ -70,7 +70,8 @@ export default function BasicCard({ data }: Data) {
                     {data.job_title}
                 </Typography>
                 <Typography sx={{ mb: 1.5, textAlign: 'center' }} color="text.secondary">
-                    {data.company.company_name}, {data.company.location.city}
+                    {data.company.company_name}
+                    {/* , {data.company.location.city} */}
                 </Typography>
                 <Typography variant="body2" sx={{ textAlign: 'center' }}>
                     {`Salary: ₹ ${data.salary}`}
@@ -88,6 +89,7 @@ export default function BasicCard({ data }: Data) {
                 >
                     View Company
                 </Button>
+        
                 <IconButton onClick={handleShareClick}>
                     <ShareIcon />
                 </IconButton>

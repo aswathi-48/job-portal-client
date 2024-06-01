@@ -3,7 +3,7 @@
 import BasicCard from '@/components/job/Card';
 import { fetchCompany } from '@/redux/company/companySlice';
 import { fetchJobById } from '@/redux/job/jobSlice'
-import { Box, Chip, Grid, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -80,7 +80,7 @@ const page = ({ params }: { params: { id: string } }) => {
   });
   
   return (
-    <div>
+    <div style={{ }}>
       <Grid container spacing={2} sx={{
         paddingLeft: "23%",
       }}>
@@ -88,8 +88,9 @@ const page = ({ params }: { params: { id: string } }) => {
           padding: "10% 10% 20px 10%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
-        }}>
+          justifyContent: "center",
+          
+        }} >
           <BasicCard _id={params.id} data={formValue} />
         </Grid>
         <Grid >
@@ -131,7 +132,7 @@ const page = ({ params }: { params: { id: string } }) => {
             </Typography>
             </Box>
           </Grid>
-          <Grid xs={6} >\
+          <Grid xs={6} >
           <Box sx={{ marginTop: "10% " }}>
             <Typography variant='h4'> Requirements</Typography>   
             <Chip label={formValue.requirements} sx={{ 
@@ -143,6 +144,20 @@ const page = ({ params }: { params: { id: string } }) => {
           </Box>
           </Grid>
           </Grid>
+          <Box sx={{ 
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "1px solid rgb(37, 87, 167)",
+            width:"350px",
+            textAlign: "center",
+            margin:"0px 0px 5% 13% ",
+            background: "rgb(37, 87, 167)",
+            borderRadius: "5px",
+            color: "white"
+           }}>
+            <Button sx={{ color: "white"}} > Apply Now </Button>
+          </Box>
         </Grid>
       </Grid>
     </div>

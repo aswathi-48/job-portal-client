@@ -25,6 +25,7 @@ export interface Job {
   description: string,
   requirements: string[],
   status: string
+  interviewScheduledAt: string
 }
 
 export interface JobState {
@@ -105,7 +106,7 @@ export const fetchJobById = (id: string): AppThunk<Promise<void>> => async (disp
 export const addNewJobs = ( formData: any ): AppThunk =>  async dispatch => {
   const storedToken = localStorage.getItem("access_token")
 
-  formData.requirements = formData.requirements.join(", ");  // extra step 
+  formData.requirements = formData.requirements.join(", ");  // extra step  
   formData.requirements = JSON.stringify(formData.requirements);
   
   const response = await axios.post('http://localhost:5100/job/add', formData, {

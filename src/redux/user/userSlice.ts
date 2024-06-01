@@ -10,7 +10,8 @@ export interface User {
     email: string,
     role: string,
     image: FileList,
-    subscription: boolean
+    subscription: boolean,
+    skills: string
 }
 export interface UserState {
     users: User[]
@@ -47,6 +48,7 @@ export const userSlice = createSlice({
 interface Delete {
     userId: string
 }
+
 export const fetchUserById = (id: string): AppThunk<Promise<void>> => async (dispatch) => {
     const storedToken = localStorage.getItem("access_token");
     const response = await axios.post(`http://localhost:5100/user/profile`, { UserId: id }, {

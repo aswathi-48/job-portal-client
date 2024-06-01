@@ -23,7 +23,8 @@ interface FormData {
   description: string,
   requirements: string[]
   status: string
-  createdAt: string
+  createdAt: string,
+  interviewScheduledAt: string
 }
 
 
@@ -166,6 +167,14 @@ export default function AddNewJob({ open, handleClose, companies }: { open: any,
           fullWidth
           {...register("description")}
           name='description'
+        />
+                <TextField
+          autoFocus
+          margin="dense"
+          type="date"
+          fullWidth
+          {...register("interviewScheduledAt")}
+          name='interviewScheduledAt'
         />
       </DialogContent>
       <DialogActions>
